@@ -69,11 +69,11 @@ set_window_manager()
         pacman -S xorg-xinit i3-wm ttf-font-awesome dmenu --noconfirm
         #sudo -u $USER_NAME cp /etc/i3status.conf ~/.config/i3status/config
         
-        sudo -u $USER_NAME cat <<EOF > ~/.xinitrc
+        sudo -u $USER_NAME bash -c "cat <<EOF > ~/.xinitrc
 #!/usr/bin/env bash
-exec i3-wm
+exec i3
 EOF
-
+"
     fi
 }
 
