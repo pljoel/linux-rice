@@ -66,7 +66,7 @@ set_window_manager()
     #Install and configure windows manager
     if [ $WINDOW_MANAGER = "i3" ]
     then
-        pacman -S xorg-xinit i3-wm ttf-font-awesome dmenu --noconfirm
+        pacman -S xorg-server xorg-xinit i3-wm ttf-font-awesome dmenu --noconfirm
         #sudo -u $USER_NAME cp /etc/i3status.conf ~/.config/i3status/config
         
         sudo -u $USER_NAME bash -c "cat <<EOF > ~/.xinitrc
@@ -92,6 +92,13 @@ set_terminal()
     then
         pacman -S termite --noconfirm
     fi
+}
+
+install_blackarch()
+{
+    curl -O https://blackarch.org/strap.sh -o /tmp/strap.sh
+    chmod +x /tmp/strap.sh
+    /tmp/strap.sh 
 }
 
 ###
