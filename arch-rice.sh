@@ -5,13 +5,13 @@
 ####
 
 ### Variables
-USER_NAME = "joel"
-USER_PASS = ""
-USER_SHELL = "fish"
+USER_NAME="joel"
+USER_PASS=""
+USER_SHELL="fish"
 
-WINDOW_MANAGER = "i3"
+WINDOW_MANAGER="i3"
 #$(openssl passwd -1 $USER_PASS)
-TERMINAL = "termite"
+TERMINAL="termite"
 
 check_root()
 {
@@ -41,6 +41,7 @@ create_user()
         echo "Username is unset"
         echo -n "Enter a username and press [ENTER]: "
         read USER_NAME
+        useradd -m -G sudo $USER_NAME
         echo "Enter a password for $USER_NAME ..."
         passwd $USER_NAME
     else
