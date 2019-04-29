@@ -28,10 +28,11 @@ update_pacman_system()
     pacman -Syyu --noconfirm
 }
 
-edit_sudoers()
+configure_sudoers()
 {
     pacman -S sudo --noconfirm
     sed -i 's/^#\s*\(%sudo\s*ALL=(ALL)\s*ALL\)/\1/' /etc/sudoers
+    groupadd -g 27 sudo
 }
 
 create_user()
@@ -98,7 +99,7 @@ set_terminal()
 ###
 check_root
 update_pacman_system
-edit_sudoers
+configure_sudoers
 create_user
 set_window_manager
 set_shell
