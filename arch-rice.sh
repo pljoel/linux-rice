@@ -61,6 +61,15 @@ create_user()
     fi
 }
 
+set_shell()
+{
+    if [ $USER_SHELL = "fish" ]
+    then
+        pacman -S fish --noconfirm
+        chsh -s /usr/bin/fish $USER_NAME
+    fi
+}
+
 set_window_manager()
 {
     #Install and configure windows manager
@@ -77,15 +86,6 @@ EOF
     fi
 }
 
-set_shell()
-{
-    if [ $USER_SHELL = "fish" ]
-    then
-        pacman -S fish --noconfirm
-        chsh -s /usr/bin/fish $USER_NAME
-    fi
-}
-
 set_terminal()
 {
     if [ $TERMINAL = "termite" ]
@@ -94,11 +94,17 @@ set_terminal()
     fi
 }
 
-install_blackarch()
+add_blackarch_repo()
 {
     curl -O https://blackarch.org/strap.sh -o /tmp/strap.sh
     chmod +x /tmp/strap.sh
     /tmp/strap.sh 
+}
+
+
+configure_window_manager()
+{
+    
 }
 
 ###
@@ -108,6 +114,7 @@ check_root
 update_pacman_system
 configure_sudoers
 create_user
-set_window_manager
 set_shell
+set_window_manager
 set_terminal
+add_blackarch_repo
