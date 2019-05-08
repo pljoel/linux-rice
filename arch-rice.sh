@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+### Script variables
+SCRIPT_LOC="${0%/*}"
+
 ####
 ### Arch rice
 ####
@@ -75,7 +78,7 @@ set_window_manager()
     #Install and configure windows manager
     if [ $WINDOW_MANAGER = "i3" ]
     then
-        pacman -S xorg-server xorg-xinit i3-wm ttf-font-awesome dmenu --noconfirm
+        pacman -S xorg-server xorg-xinit i3-gaps i3blocks ttf-dejavu otf-font-awesome ttf-roboto dmenu --noconfirm
         #sudo -u $USER_NAME cp /etc/i3status.conf ~/.config/i3status/config
         
         sudo -u $USER_NAME bash -c "cat <<EOF > ~/.xinitrc
@@ -96,14 +99,15 @@ set_terminal()
 
 add_blackarch_repo()
 {
-    curl -O https://blackarch.org/strap.sh -o /tmp/strap.sh
+    curl -o /tmp/strap.sh -O https://blackarch.org/strap.sh
     chmod +x /tmp/strap.sh
     /tmp/strap.sh 
 }
 
 
-configure_window_manager()
+configure_environment()
 {
+    sudo -u $USER_NAME bash -c "cp -Rf $SCRIPT_LOC/.config/ ~/.config && i3-msg restart"
     
 }
 
@@ -118,3 +122,4 @@ set_shell
 set_window_manager
 set_terminal
 add_blackarch_repo
+configure_environment
