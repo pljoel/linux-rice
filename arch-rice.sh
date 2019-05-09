@@ -59,7 +59,7 @@ create_user()
         else
             echo "User password is set"
             useradd -m -G sudo -p $(openssl passwd -1 $USER_PASS) $USER_NAME
-            USER_PASS = ""
+            USER_PASS=""
         fi
     fi
 }
@@ -104,13 +104,32 @@ add_blackarch_repo()
     /tmp/strap.sh 
 }
 
-
 configure_environment()
 {
-    sudo -u $USER_NAME bash -c "cp -Rf $SCRIPT_LOC/.config/ ~/.config && i3-msg restart"
-    
+    sudo -u $USER_NAME bash -c "cp -Rf $SCRIPT_LOC/.config/ ~/.config" 
 }
 
+install_tools()
+{
+    BASE_TOOLS="vim tk htop strace"
+    NETWORK_TOOLS="whois nmap tcpdump"
+    DEV_TOOLS="firefox python python-pip"
+    SECURITY_TOOLS="metasploit"
+    METASPLOIT="metasploit postgresql"
+    pacman -S  --noconfirm
+    
+    #Setup Postgres and Metasploit
+    sudo -u postgres bash -c "initdb -D /var/lib/postgres/data"
+    sudo -u postgres bash -c "createuser -s $USER_NAME"
+    sudo -u $USER_NAME bash -c "createdb msf"
+sudo -u $USER_NAME bash -c "msfconsole --quiet -r - <<EOF
+db_connect $USER_NAME@msf
+db_rebuild_cache
+sleep 60
+exit -y
+EOF
+"
+}
 ###
 ## Main
 ###
@@ -123,3 +142,4 @@ set_window_manager
 set_terminal
 add_blackarch_repo
 configure_environment
+install_tools
