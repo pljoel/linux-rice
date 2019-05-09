@@ -116,7 +116,7 @@ install_tools()
     DEV_TOOLS="firefox python python-pip"
     SECURITY_TOOLS="metasploit"
     METASPLOIT="metasploit postgresql"
-    pacman -S  --noconfirm
+    pacman -S $BASE_TOOLS $NETWORK_TOOLS $DEV_TOOLS $SECURITY_TOOLS $METASPLOIT --noconfirm
     
     #Setup Postgres and Metasploit
     sudo -u postgres bash -c "initdb -D /var/lib/postgres/data"
