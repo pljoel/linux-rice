@@ -112,20 +112,31 @@ configure_environment()
 install_tools()
 {
     BASE_TOOLS="vim tk htop strace"
-    NETWORK_TOOLS="whois nmap tcpdump"
-    DEV_TOOLS="firefox python python-pip"
+    NETWORK_TOOLS="whois nmap tcpdump openvpn"
+    DEV_TOOLS="firefox python python-pip apache"
     SECURITY_TOOLS="metasploit"
     METASPLOIT="metasploit postgresql"
     pacman -S $BASE_TOOLS $NETWORK_TOOLS $DEV_TOOLS $SECURITY_TOOLS $METASPLOIT --noconfirm
     
     #Setup Postgres and Metasploit
+    systemctl start postgresql
     sudo -u postgres bash -c "initdb -D /var/lib/postgres/data"
     sudo -u postgres bash -c "createuser -s $USER_NAME"
     sudo -u $USER_NAME bash -c "createdb msf"
-sudo -u $USER_NAME bash -c "msfconsole --quiet -r - <<EOF
-db_connect $USER_NAME@msf
+    sudo -u $USER_NAME bash -c "cat <<EOF > ~/.msf4/database.yml
+production:
+  adapter: postgresql
+  database: msf
+  username: $USER_NAME
+  host: localhost
+  port: 5432
+  pool: 5
+  timeout: 5
+EOF
+"
+    sudo -u $USER_NAME bash -c "msfconsole --quiet -r - <<EOF
 db_rebuild_cache
-sleep 60
+sleep 120
 exit -y
 EOF
 "
